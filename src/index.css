@@ -7,3 +7,6 @@
 body {
   font-family: "Rubik", "sans-serif";
 }
+.moneypoint-blue-gradient {
+  background: linear-gradient(0deg, rgba(0, 51, 130, 0.72), rgba(0, 51, 130, 0.72)), linear-gradient(135deg, #0357EE 7.89%, #05C2FF 92.12%);
+}

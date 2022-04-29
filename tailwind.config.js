@@ -10,7 +10,8 @@ module.exports = {
         "moneypoint-red" : "#E94444",
         "moneypoint-gray" : "#F1F0F7",
         "moneypoint-yellow" : "#F08922",
-        "moneypoint-green" : "#00B713"
+        "moneypoint-green" : "#00B713",
+        "moneypoint-dark-blue" : "#004BBC"
       }
     },
   },
