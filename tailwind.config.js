@@ -5,6 +5,7 @@ module.exports = {
   theme: {
     extend: {
       colors : {
+        "moneypoint-light-blue" : "#F5F9FF",
         "moneypoint-blue" : "#0361F0",
         "money-point-alt-blue" : "#00B6D4",
         "moneypoint-red" : "#E94444",

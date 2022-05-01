@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import { siteLinks } from "../../utils/siteLInks";
+import { ticketLinks } from "../../utils/siteLinks";
 
 const LeftSidebar = () => {
   return (
@@ -14,19 +15,27 @@ const LeftSidebar = () => {
         }}
         className=" h-full rounded-lg overflow-y-auto py-8 px-3"
       >
-        <h2 className=" text-white medium text-base"> User Role</h2>
-        <ul className=" mt-7 ">
-          {siteLinks.map((l) => (
-            <li className="">
-              <NavLink
-                to={l.path}
-                className={({ isActive }) => {
-                  return `block rounded p-4 border-l-4 text-xs capitalize ${isActive ? " text-moneypoint-yellow border-moneypoint-yellow bg-moneypoint-dark-blue" : " text-white border-transparent"}`;
-                }}
-              >{l.name}</NavLink>
-            </li>
-          ))}
-        </ul>
+        {true && (
+          <div className="tickets">
+            <Link className=" text-white medium text-base" to="/ticket"> Tickets</Link>
+            <ul className=" mt-4 ">
+              {ticketLinks.map((l) => (
+                <li className="">
+                  <NavLink
+                    to={l.path}
+                    className={({ isActive }) => {
+                      return `block rounded p-4 border-l-4 text-xs capitalize ${
+                        isActive ? " text-moneypoint-yellow border-moneypoint-yellow bg-moneypoint-dark-blue" : " text-white border-transparent"
+                      }`;
+                    }}
+                  >
+                    {l.name}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </nav>
     </section>
   );

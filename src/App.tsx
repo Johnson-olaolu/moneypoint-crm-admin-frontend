@@ -10,7 +10,6 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Helmet>
         <title>Money Point CRM</title>
-        <link rel="icon" type="image/png" href="url('/logo.png')"></link>
       </Helmet>
       <BrowserRouter>
         <Routes>

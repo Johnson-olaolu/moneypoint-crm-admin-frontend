@@ -2,7 +2,7 @@ import React from 'react'
 
 const Header = () => {
   return (
-    <header className='h-20 bg-white shadow-md relative border-t-4 border-moneypoint-blue px-8'>
+    <header className='h-20 bg-white shadow-md relative border-t-4 border-moneypoint-blue px-8 shrink-0'>
         <div className="flex items-center h-full w-full">
             <img src={require("../../assets/logos/moneypoint-logo.svg").default} alt="" className="" />
             <div className="flex items-center justify-between flex-grow">

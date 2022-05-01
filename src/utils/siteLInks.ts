@@ -3,13 +3,21 @@ interface ISiteLink {
     path : string
 }
 
-export  const siteLinks : ISiteLink[]  = [
+export  const ticketLinks : ISiteLink[]  = [
     {
-        name : "Ticket",
+        name : "All",
         path : "/ticket"
     },
     {
-        name : "Profile",
-        path : "/profile"
+        name : "Opened ",
+        path : "/ticket?status=closed"
+    }, 
+    {
+        name : "Completed",
+        path : "/ticket?status=completed"
+    },
+    {
+        name : "Completed",
+        path : "/ticket?status=completed"
     }
 ]
