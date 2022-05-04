@@ -4,10 +4,20 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import IndexRoutes from "./routes/index.routes";
 import { Helmet } from "react-helmet";
 
+import store from "./store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+import { Provider } from "react-redux";
+
+const persistor = persistStore(store)
+
 const queryClient = new QueryClient();
+
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <QueryClientProvider client={queryClient}>
       <Helmet>
         <title>Money Point CRM</title>
       </Helmet>
@@ -17,6 +27,9 @@ function App() {
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
+      </PersistGate>
+    </Provider>
+    
   );
 }
 

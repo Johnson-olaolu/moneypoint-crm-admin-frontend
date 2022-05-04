@@ -1,17 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import TicketStatusTypes from "../../../components/statusTypes/TicketStatusTypes";
-import { ITicketData } from "../../../interface/ticket.interface";
+import { IFirebaseTicketData } from "../../../interface/ticket.interface";
 import { ticketStatusTypes } from "../../../utils/constants";
 
 interface ISingleTicketItem {
-  ticket :ITicketData
+  ticket :IFirebaseTicketData
 }
 
 const SingleTicketItem : React.FC<ISingleTicketItem> = (props): JSX.Element => {
   const navigate = useNavigate()
   const { ticket } = props;
-
+  console.log(ticket);
   const  handleTicketNavigate = (status : ticketStatusTypes , ticketRef : string) => {
     navigate(`ongoing/${ticketRef}`)
   }

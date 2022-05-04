@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
+import { firebaseService } from '../../services/firebase.service'
 import Breadcrumbs from '../breadcrumbs/Breadcrumbs'
 import Header from '../header/Header'
 import LeftSidebar from '../sidebar/LeftSidebar'
 
 const AppLayout = () => {
+
+  //handle firebase listeners
+  useEffect(() => {
+    firebaseService.listenForTickets()
+  },[])
   return (
     <section className=" flex h-screen flex-col bg-moneypoint-light-blue">
     <Header />
