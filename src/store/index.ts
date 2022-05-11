@@ -4,9 +4,13 @@ import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
 import tickets from "./ticketStore"
+import messages from "./messageStore"
+import user from "./userStore"
 
 const reducers = combineReducers({
-    tickets
+    tickets,
+	user,
+	messages
 })
 
 const persistConfig = {

@@ -11,7 +11,6 @@ interface ISingleTicketItem {
 const SingleTicketItem : React.FC<ISingleTicketItem> = (props): JSX.Element => {
   const navigate = useNavigate()
   const { ticket } = props;
-  console.log(ticket);
   const  handleTicketNavigate = (status : ticketStatusTypes , ticketRef : string) => {
     navigate(`ongoing/${ticketRef}`)
   }

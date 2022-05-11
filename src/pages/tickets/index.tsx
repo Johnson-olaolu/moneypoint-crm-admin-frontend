@@ -9,7 +9,7 @@ const TicketRoutes = () => {
     <>
       <Routes>
           <Route index element = {<ViewAllTickets/>}/>
-          <Route path = "/ongoing/:ticketId" element = {<ViewSingleTicket/>} />
+          <Route path = "/ongoing/:ticketRef" element = {<ViewSingleTicket/>} />
           <Route path = "/*" element ={<Navigate to="/404"/>}/>
       </Routes>
     </>

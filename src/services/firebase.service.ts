@@ -5,6 +5,7 @@ import "firebase/compat/messaging";
 import "firebase/compat/database";
 import store from "../store";
 import { loadTickets } from "../store/ticketStore";
+import { getMessages } from "../store/messageStore";
 
 
 
@@ -33,6 +34,18 @@ const listenForTickets =() => {
   });
 };
 
+const listenForMessages = (ticketRef : string) => {
+  const ticketMessageRef = db.ref(`ticket/${ticketRef}/messages`)
+  ticketMessageRef.on("value", snapshot => {
+    const allMessages : any[] = []
+    snapshot.forEach(childSnapshot => {
+      allMessages.push(childSnapshot.val())
+    })
+    store.dispatch(getMessages(allMessages))
+  })
+}
+
 export const firebaseService = {
-  listenForTickets
+  listenForTickets,
+  listenForMessages
 };

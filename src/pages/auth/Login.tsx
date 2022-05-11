@@ -1,13 +1,28 @@
 import React, { useRef, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { useMutation } from 'react-query';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import MCustomInput from '../../components/forms/MCustomInput';
 import MCustomSubmit from '../../components/forms/MCustomSubmit';
+import { authService } from '../../services/auth.service';
+import { userLogin } from '../../store/userStore';
 
 const Login = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
     const [formData, setFormData] = useState({
-      userName: "",
+      email: "",
       password: ""
     });
+
+    const loginMutation = useMutation( async( loginData : {
+      email : string,
+      password : string
+    })=> {
+      const response =  await authService.login(loginData)
+      dispatch(userLogin(response))
+      navigate("/ticket")
+    })
     const [errMsg, setErrMsg] = useState(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,21 +32,26 @@ const Login = () => {
       });
     };
   
+    const handleSubmit = (e :React.SyntheticEvent) => {
+      e.preventDefault()
+       loginMutation.mutate(formData)
+    } 
+
     return (
       <section className="  min-h-screen moneypoint-blue-gradient  flex items-center justify-center">
-        <form className=" text-center max-w-xl mx-auto">
+        <form onSubmit={handleSubmit} className=" text-center max-w-xl mx-auto">
           <h2 className=" text-white text-5xl font-medium">Login</h2>
           <p className=" text-white text-3xl mt-12 mb-20">Enter your details to login</p>
           <div className=" ">
             <MCustomInput
-              name="userName"
-              value={formData.userName}
+              name="email"
+              value={formData.email}
               errorMsg={errMsg}
-              placeholder="Input UserName"
+              placeholder="Input Email"
               onChange={handleChange}
-              label="Enter Username"
+              label="Enter Email"
               ref={inputRef}
-              type="text"
+              type="email"
             />
                <MCustomInput
               name="password"
