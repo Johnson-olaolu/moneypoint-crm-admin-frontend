@@ -3,48 +3,41 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { firebaseService } from "../../../services/firebase.service";
 import { ticketService } from "../../../services/ticket.service";
+import { getInitials } from "../../../utils/helpers";
+import { IUser } from "../../../interface/user.interface";
 
 interface ITicketChat {
-    ticketRef : string
+  ticketRef: string;
 }
 
-const TicketChat : React.FC<ITicketChat> = (props) => {
-    const { ticketRef} = props
-    const {user} = useSelector((state : any) => state.user)
-    const {messages} = useSelector((state : any) => state.messages)
+const TicketChat: React.FC<ITicketChat> = (props) => {
+  const { ticketRef } = props;
+  const { user } = useSelector((state: any) => state.user);
+  const { messages } = useSelector((state: any) => state.messages);
 
-    console.log(ticketRef);
+  useEffect(() => {
+    firebaseService.listenForMessages(ticketRef);
+  }, [ticketRef]);
 
-    useEffect(() => {
-        firebaseService.listenForMessages(ticketRef)
-    },[ticketRef])
-    
-    const [messageData, setMessageData] = useState("")
+  const [messageData, setMessageData] = useState("");
 
-    const handleSendMessage = async () => {
-      let payload = {
-        ticketRef : ticketRef,
-        userId : user.id,
-        message : messageData,
-        sentAt : new Date()
-      }
-      console.log(payload);
-      const response = await ticketService.sendNewMessage(payload)
-      console.log(response);
-    }
-  
+  const handleSendMessage = async () => {
+    let payload = {
+      ticketRef: ticketRef,
+      userId: user.id,
+      message: messageData,
+      sentAt: new Date(),
+    };
+    const response = await ticketService.sendNewMessage(payload);
+    setMessageData("")
+  };
+
   return (
     <div className=" h-full flex flex-col ">
       <div className="grow">
-          {messages.map((message : { userId? : number, message : string, sentAt : Date , createdAt : Date}) => (
-              <SingleChatItem
-              sentAt= {message.sentAt}
-              createdAt = {message.createdAt}
-              message= {message.message}
-              userId= {message.userId}
-            />
-          ))}
-        
+        {messages.map((message: { userId?: number; message: string; sentAt: Date; createdAt: Date }) => (
+          <SingleChatItem sentAt={message.sentAt} createdAt={message.createdAt} message={message.message} userId={message.userId} />
+        ))}
       </div>
       {/* chat bar */}
       <div className=" h-8 shrink-0">
@@ -62,7 +55,9 @@ const TicketChat : React.FC<ITicketChat> = (props) => {
               name="message"
               placeholder="Type in your message here"
               value={messageData}
-              onChange = {(e : React.ChangeEvent<HTMLInputElement>) => { setMessageData(e.target.value)}}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setMessageData(e.target.value);
+              }}
               className=" flex-grow bg-transparent focus-visible:outline-none text-sm placeholder:text-gray-300 text-gray-600"
             />
             <div className=" flex shrink-0 items-center space-x-2">
@@ -89,7 +84,11 @@ const TicketChat : React.FC<ITicketChat> = (props) => {
               </svg>
             </div>
           </div>
-          <button onClick={handleSendMessage} disabled = {messageData === ""} className=" h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer disabled:opacity-50">
+          <button
+            onClick={handleSendMessage}
+            disabled={messageData === ""}
+            className=" h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer disabled:opacity-50"
+          >
             <svg width="17" height="14" viewBox="0 0 17 14" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M6.5 13.8417L16.3847 0.629206L0 2.58337L2.52778 6.96161L12.6319 2.79587L3.97222 9.46346L6.5 13.8417Z" fill="#0361F0" />
             </svg>
@@ -102,32 +101,33 @@ const TicketChat : React.FC<ITicketChat> = (props) => {
 
 interface ISingleChat {
   sentAt: Date;
-  createdAt : Date;
+  createdAt: Date;
   message: string;
   userId?: number;
 }
 const SingleChatItem: React.FC<ISingleChat> = (props) => {
-    const {message, sentAt, createdAt, userId} = props
+  const { user }: { user: IUser } = useSelector((state: any) => state.user);
+  const { message, sentAt, createdAt, userId } = props;
   return (
     <div className=" mb-4">
-      {!userId? (
+      {!userId ? (
         <div className=" flex space-x-2 items-end max-w-md ">
           <div className=" w-6 h-6 rounded-full bg-gray-200 shrink-0 flex items-center justify-center">
-            <span className=" text-xs text-gray-800">OJ</span>
+            <span className=" text-xs text-gray-800">G</span>
           </div>
           <div className=" bg-gray-200 rounded-tl-lg rounded-tr-lg rounded-br-lg text-xs p-4 text-gray-600">
             {message}
-            <p className="text-right text-blue-400">{moment(sentAt).fromNow(true)}</p>
-            </div>
+            <p className="text-right text-blue-400">{moment(sentAt).fromNow()}</p>
+          </div>
         </div>
       ) : (
         <div className=" flex space-x-2 items-end max-w-md ml-auto justify-end">
           <div className=" bg-moneypoint-blue rounded-tl-lg rounded-tr-lg rounded-bl-lg text-xs p-4 text-blue-100">
-              {message}
-            <p className="text-right text-blue-400">{moment(createdAt).fromNow(true)}</p>
-            </div>
-           <div className=" w-6 h-6 rounded-full bg-moneypoint-blue shrink-0 flex items-center justify-center">
-            <span className=" text-xs text-white">OJ</span>
+            {message}
+            <p className="text-right text-blue-400">{moment(sentAt).fromNow()}</p>
+          </div>
+          <div className=" w-6 h-6 rounded-full bg-moneypoint-blue shrink-0 flex items-center justify-center">
+            <span className=" text-xs text-white">{getInitials(`${user.firstName} ${user.lastName}`)}</span>
           </div>
         </div>
       )}
