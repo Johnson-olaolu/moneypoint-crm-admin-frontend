@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -9,12 +9,15 @@ import { ICustomerSupportLevel } from "../../interface/customer-support.interfac
 import { iTicket } from "../../interface/ticket.interface";
 import { customerSupportService } from "../../services/customer-support.service";
 import { ticketService } from "../../services/ticket.service";
+import { RootState } from "../../store";
 import { ticketStatusTypes } from "../../utils/constants";
 import TicketChat from "./components/TicketChat";
 
 const ViewSingleTicket = () => {
+
+
   const { ticketRef } = useParams();
-  const { user } = useSelector((state: any) => state.user);
+  const { user }  = useSelector((state: RootState) => state.user);
 
   const [ticketInfo, setTicketInfo] = useState<iTicket>();
   const [customerSupportLevels, setCustomerSupportLevels ] = useState<ICustomerSupportLevel[]>();
@@ -26,10 +29,17 @@ const ViewSingleTicket = () => {
   })
 
   const ticketQuery = useQuery(["ticket", ticketRef], () => ticketService.getSingleTicketByRef(ticketRef!), {
-    onSuccess: () => {
-      setTicketInfo(ticketQuery.data);
+    onSuccess: async  ( data) => {
+      setTicketInfo(data);
+      if ( !data.assigned) {
+        const response = await ticketService.assignTicket({ ticketRef : data.ticketRef, customerSupportId : user?.customerSupport?.id!})
+      }
     },
   });
+
+  useEffect(() => {
+
+  }, [])
 
   return (
     <>

@@ -1,4 +1,6 @@
+import moment from "moment";
 import React from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import TicketStatusTypes from "../../../components/statusTypes/TicketStatusTypes";
 import { IFirebaseTicketData } from "../../../interface/ticket.interface";
@@ -12,74 +14,19 @@ const SingleTicketItem : React.FC<ISingleTicketItem> = (props): JSX.Element => {
   const navigate = useNavigate()
   const { ticket } = props;
   const  handleTicketNavigate = (status : ticketStatusTypes , ticketRef : string) => {
-    navigate(`ongoing/${ticketRef}`)
+    navigate(``)
   }
 
   return (
-    <div  onClick={ () => {handleTicketNavigate(ticket.status, ticket.ticketRef)}} className=" bg-gray-100 rounded-md p-5 shadow-sm hover:shadow-md cursor-pointer">
-      <div className=" pb-4">
-        <h4 className=" text-base text-gray-800 font-medium capitalize mb-2"> {ticket.title}</h4>
-        <p className=" text-sm text-gray-800 ticket-item-text max-h-10 overflow-hidden ">{ticket.description}</p>
-      </div>
-      <div className="grid grid-cols-4 gap-y-3">
-        <div className=" space-y-2">
-          <label htmlFor="issueId" className=" uppercase text-sm text-gray-400 ">
-            ISSUE ID
-          </label>
-          <p id="issueId" className="">
-            #{ticket.ticketRef}
-          </p>
+    <>
+      <Link to={`ongoing/${ticket.ticketRef}`} className = " block">
+        <div className=" px-4 py-3 bg-gray-100 rounded-md space-y-1 relative hover:shadow-md">
+          <p className=" text-sm text-gray-800">{ticket.title}</p>
+          <div className=" flex items-center gap-1 text-xs text-gray-400 uppercase"> <span>STATUS</span> <TicketStatusTypes status={ticket.status}/></div> 
+          <span className=" absolute right-4 text-xs italic text-gray-400 top-1">{moment(Date.now()).fromNow()}</span>  
         </div>
-        <div className=" space-y-2">
-          <label htmlFor="issueId" className=" uppercase text-sm text-gray-400 ">
-            Category
-          </label>
-          <p id="issueId" className="">
-            {ticket.category}
-          </p>
-        </div>
-        <div className=" space-y-2">
-          <label htmlFor="issueId" className=" uppercase text-sm text-gray-400 ">
-            Customer Email
-          </label>
-          <p id="issueId" className="">
-            {ticket.email}
-          </p>
-        </div>
-        <div className=" space-y-2">
-          <label htmlFor="issueId" className=" uppercase text-sm text-gray-400 ">
-            Agent ID
-          </label>
-          <p id="issueId" className="">
-            {ticket.agentEmail}
-          </p>
-        </div>
-        <div className=" space-y-2">
-          <label htmlFor="issueId" className=" uppercase text-sm text-gray-400 ">
-            Assigned to
-          </label>
-          <p id="issueId" className="">
-            Unassigned
-          </p>
-        </div>
-        <div className=" space-y-2">
-          <label htmlFor="issueId" className=" uppercase text-sm text-gray-400 ">
-            status
-          </label>
-          <p id="issueId" className="">
-            <TicketStatusTypes status={ticket.status}/>
-          </p>
-        </div>
-        <div className=" col-span-2 flex items-center gap-4 justify-end">
-          <button className=" rounded bg-moneypoint-blue text-white w-36 h-12 font-medium capitalize">
-            take issue
-          </button>
-          <button className=" rounded bg-moneypoint-red text-white w-36 h-12 font-medium capitalize">
-            close
-          </button>
-        </div>
-      </div>
-    </div>
+      </Link>
+    </>
   );
 };
 

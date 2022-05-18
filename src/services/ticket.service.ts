@@ -1,19 +1,31 @@
+import { iTicket } from "../interface/ticket.interface"
 import axiosService from "./axios.service"
 
-
-const sendNewMessage  = (payload : { userId? : string, message : string, ticketRef : string  , sentAt : Date }) => {
-    const {message, ticketRef, userId , sentAt} = payload
-    return axiosService.post(`/ticket/message/${ticketRef}` , {message, userId, sentAt})
+const getSingleTicketByRef = (ticketRef : string) : Promise<iTicket> => {
+    return axiosService.get(`/ticket/ref/${ticketRef}`)
         .then(res => {
             return res.data
         })
         .catch(err => {
             console.error(err)
+            Promise.reject()
         })
 }
 
-const getSingleTicketByRef = (ticketRef : string) => {
-    return axiosService.get(`/ticket/ref/${ticketRef}`)
+const assignTicket= (payload: { assigneeId? : number , ticketRef : string,  customerSupportId : number} )  : Promise<string>  => {
+    return axiosService.post(`ticket/assign-ticket`, payload) 
+        .then(res => {
+            return res.data
+        })
+        .catch(err =>{
+            console.error(err)
+            return Promise.reject()
+        })
+}
+
+const sendNewMessage  = (payload : { customerSupportId? : number, message : string, ticketRef : string  , sentAt : Date }) => {
+    const {message, ticketRef, customerSupportId, sentAt} = payload
+    return axiosService.post(`/ticket/message/${ticketRef}` , {message, customerSupportId, sentAt})
         .then(res => {
             return res.data
         })
@@ -24,5 +36,6 @@ const getSingleTicketByRef = (ticketRef : string) => {
 
 export const ticketService = {
     sendNewMessage,
-    getSingleTicketByRef
+    getSingleTicketByRef,
+    assignTicket
 } 

@@ -1,19 +1,20 @@
-import { useNavigate } from "react-router-dom"
+import { ICustomerSupport } from "../interface/customer-support.interface"
+import { IUser } from "../interface/user.interface"
 import axiosService from "./axios.service"
-
 
 const login = (payload : {
     email : string,
     password : string
-}) => {
+}) : Promise <{ user : IUser , customerSupport? : ICustomerSupport}> =>  {
     return axiosService.post("/auth/login", payload)
         .then((res) => {
-            const {accessToken, data } = res.data
+            const {accessToken, user , customerSupport } = res.data
             localStorage.setItem("token", accessToken)
-            return data
+            return customerSupport? {user, customerSupport} : { user}
         })
         .catch(err => {
             console.error(err);
+            return  Promise.reject()
         })
 }
 

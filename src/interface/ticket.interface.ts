@@ -1,5 +1,6 @@
 import { ticketStatusTypes } from "../utils/constants";
 import { ICategory } from "./category.interface";
+import { ICustomerSupport } from "./customer-support.interface";
 
 export interface iTicket {
   title : string
@@ -10,6 +11,8 @@ export interface iTicket {
   subCategory? : string
   ticketRef : string,
   agentEmail? : string
+  assigned? : ICustomerSupport
+  escalated? : boolean
   createdAt : Date
   UpdatedAt : Date
 }

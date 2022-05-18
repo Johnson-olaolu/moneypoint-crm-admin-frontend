@@ -5,6 +5,7 @@ import { firebaseService } from "../../../services/firebase.service";
 import { ticketService } from "../../../services/ticket.service";
 import { getInitials } from "../../../utils/helpers";
 import { IUser } from "../../../interface/user.interface";
+import { RootState } from "../../../store";
 
 interface ITicketChat {
   ticketRef: string;
@@ -12,7 +13,7 @@ interface ITicketChat {
 
 const TicketChat: React.FC<ITicketChat> = (props) => {
   const { ticketRef } = props;
-  const { user } = useSelector((state: any) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const { messages } = useSelector((state: any) => state.messages);
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const TicketChat: React.FC<ITicketChat> = (props) => {
   const handleSendMessage = async () => {
     let payload = {
       ticketRef: ticketRef,
-      userId: user.id,
+      customerSupportId: user?.customerSupport?.id,
       message: messageData,
       sentAt: new Date(),
     };
@@ -34,9 +35,9 @@ const TicketChat: React.FC<ITicketChat> = (props) => {
 
   return (
     <div className=" h-full flex flex-col ">
-      <div className="grow">
-        {messages.map((message: { userId?: number; message: string; sentAt: Date; createdAt: Date }) => (
-          <SingleChatItem sentAt={message.sentAt} createdAt={message.createdAt} message={message.message} userId={message.userId} />
+      <div className="grow h-96  overflow-y-auto">
+        {messages.map((message: { user?: string; message: string; sentAt: Date; createdAt: Date }) => (
+          <SingleChatItem sentAt={message.sentAt} createdAt={message.createdAt} message={message.message} user={message.user} />
         ))}
       </div>
       {/* chat bar */}
@@ -103,14 +104,14 @@ interface ISingleChat {
   sentAt: Date;
   createdAt: Date;
   message: string;
-  userId?: number;
+  user?: string;
 }
 const SingleChatItem: React.FC<ISingleChat> = (props) => {
-  const { user }: { user: IUser } = useSelector((state: any) => state.user);
-  const { message, sentAt, createdAt, userId } = props;
+  //const { user }: { user: IUser } = useSelector((state: any) => state.user);
+  const { message, sentAt, createdAt, user } = props;
   return (
     <div className=" mb-4">
-      {!userId ? (
+      {!user ? (
         <div className=" flex space-x-2 items-end max-w-md ">
           <div className=" w-6 h-6 rounded-full bg-gray-200 shrink-0 flex items-center justify-center">
             <span className=" text-xs text-gray-800">G</span>
@@ -127,7 +128,7 @@ const SingleChatItem: React.FC<ISingleChat> = (props) => {
             <p className="text-right text-blue-400">{moment(sentAt).fromNow()}</p>
           </div>
           <div className=" w-6 h-6 rounded-full bg-moneypoint-blue shrink-0 flex items-center justify-center">
-            <span className=" text-xs text-white">{getInitials(`${user.firstName} ${user.lastName}`)}</span>
+            <span className=" text-xs text-white">{getInitials(user)}</span>
           </div>
         </div>
       )}
